@@ -1,57 +1,45 @@
 ---
 name: aiopc-accept
-description: Independently validate an OpenSpec change against its acceptance package and produce evidence, a validation report, and rework package when needed. Use when implementation is ready for acceptance, a rework needs revalidation, or acceptance criteria may be inaccurate.
+description: Independently validate an aiopc/OpenSpec change, produce evidence, validation report, and rework/change requests when needed.
 ---
 
 # aiopc-accept
 
-Validate independently. The implementer's summary is only a claim to verify, never evidence.
+## Purpose
+
+Validate independently. Implementation summaries are claims, never proof.
 
 ## Inputs
 
 - OpenSpec change id.
 - `acceptance.md`.
-- Implementation candidate summary or rework result.
-- Previous `validation-report.md` if this is a revalidation.
+- Implementation candidate or rework result.
+- Latest `validation-report.md` only for revalidation.
+
+## Minimal reads
+
+Read acceptance and artifacts needed for the current AC scope. First validation covers all ACs. Revalidation covers failed ACs plus affected regression checks. Reuse previous passes only when related code and evidence inputs were untouched.
 
 ## Workflow
 
-1. Read the acceptance package and relevant OpenSpec artifacts.
-2. Determine validation scope.
-   - First validation: validate all ACs in scope.
-   - Rework validation: validate failed ACs plus affected regression ACs.
-   - Full revalidation is required for changes to shared components, core business rules, data structure, permissions, state flows, query semantics, unclear impact, or repeated failures.
-3. Obtain evidence independently.
-   - Run tests, API calls, data checks, browser checks, or log checks as appropriate.
-   - If an AC has no type, treat it as `automated test`.
-   - If a non-automated AC lacks a reason, mark the acceptance package as needing correction.
-4. Classify each AC as `passed`, `failed`, `blocked`, or `not-run`.
-5. Write/update `validation-report.md` without deleting prior history.
-6. If failures are implementation defects, write a rework package.
-7. If the acceptance package is inaccurate, ambiguous, too broad, or not executable, write an acceptance-package change request.
+1. Determine validation scope.
+2. Obtain independent evidence with tests, API calls, data checks, browser checks, or logs.
+3. Classify each AC as `passed`, `failed`, `blocked`, or `not-run`.
+4. Write/update `validation-report.md` without deleting history.
+5. Write a rework package for implementation defects, or an acceptance-package change request for bad ACs.
 
-## Required outputs
+## Stop / Escalate
 
-Use the templates in [REFERENCE.md](REFERENCE.md).
+Escalate to full revalidation when impact is broad/unclear, or shared components, core rules, data structures, permissions, state flows, query semantics, or repeated failures are involved.
 
-- `validation-report.md`: conclusion, scope, AC table, reused results, failures, blockers, acceptance-package issues.
-- Rework package: only failed ACs, expected/current results, evidence, constraints, and regression checks.
-- Acceptance-package change request: problem type, original AC, proposed change, and impact analysis.
+## Output contract
 
-## Revalidation strategy
-
-Default to speed:
-
-- Revalidate failed ACs.
-- Revalidate ACs affected by implementation changes.
-- Reuse previous passed results only when related code was not touched.
-
-Escalate to full revalidation when impact is broad or unclear.
+Return conclusion, scope, failures/blockers, artifact paths, and next action. Long tables/templates belong in files using [REFERENCE.md](REFERENCE.md).
 
 ## Guardrails
 
-- Do not pass an AC without evidence.
+- Require independent evidence for every passed AC.
+- Do not use implementation summaries as proof.
 - Do not treat blocked validation as passed.
-- Do not modify code in this skill.
-- Do not lower acceptance standards to match the current implementation.
-- Do not accept implementation-agent output as evidence.
+- Do not modify code or lower acceptance standards.
+- no-unnecessary-agent: direct reads/commands for known validation artifacts; agents only for broad unknown exploration.

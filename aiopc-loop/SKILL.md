@@ -1,97 +1,43 @@
 ---
 name: aiopc-loop
-description: Orchestrate the aiopc implementation and acceptance loop for an OpenSpec change with bounded automatic rework. Use when the user wants the workflow to implement, validate, repair, and revalidate a change with minimal manual prompting.
+description: Orchestrate aiopc apply/accept/rework cycles for a frozen OpenSpec change with bounded automatic repair.
 ---
 
 # aiopc-loop
 
-Coordinate the workflow. Do not directly implement code or make acceptance judgments here; route work to the focused skills and enforce stop conditions.
+## Purpose
 
-## Responsibilities
+Coordinate `aiopc-apply` and `aiopc-accept`. Do not implement code or make acceptance judgments here.
 
-- Select the OpenSpec change and acceptance package.
-- Run `aiopc-apply` for implementation or rework.
-- Run `aiopc-accept` for independent validation.
-- Feed the rework package back to `aiopc-apply` when validation fails.
-- Stop after success, blocker, acceptance-package issue, or the automatic rework limit.
+## Inputs
 
-## Loop
+- OpenSpec change id or enough context to select one.
+- Frozen `acceptance.md`.
+- Optional latest validation or rework package.
 
-```text
-propose/frozen acceptance exists
-  -> aiopc-apply
-  -> aiopc-accept
-  -> if passed: stop and report ready for user spot-check
-  -> if failed with rework package: aiopc-apply rework
-  -> aiopc-accept revalidation
-  -> repeat up to 2 automatic rework rounds
-  -> otherwise escalate to user
-```
+## Minimal reads
 
-## Default limits
+Read only enough to select the change, confirm acceptance exists, and route next step. Delegate implementation and validation details to focused skills instead of duplicating artifact reads.
 
-- Maximum automatic rework rounds: 2.
-- Rework scope: failed ACs plus affected regression checks only.
-- Revalidation scope: failed ACs plus affected regression checks by default.
-- Full revalidation only when impact requires it.
+## Workflow
 
-## Stop and escalate when
+1. If acceptance is missing/unclear, route to `aiopc-propose` or ask the user.
+2. Run `aiopc-apply` for implementation or scoped rework.
+3. Run `aiopc-accept` for independent validation.
+4. If failed with rework package, repeat apply -> accept up to two automatic rework rounds.
+5. Stop on pass, blocker, bad acceptance, user decision, or rework limit.
 
-- The same AC fails twice.
-- More than 2 rework rounds are needed.
-- Acceptance package appears wrong, ambiguous, or not executable.
-- Product or business decision is required.
-- Fix requires scope expansion.
-- Fix touches core architecture, permissions, data model, state flow, or shared query semantics beyond the accepted scope.
-- Test evidence and browser/manual evidence conflict.
-- Environment cannot run, start, or validate.
+## Stop / Escalate
 
-## Status output
+Escalate when the same AC fails twice, more than two rework rounds are needed, scope expands, core architecture/data/permissions/state/query semantics are touched beyond scope, evidence conflicts, or validation cannot run.
 
-```md
-## aiopc Loop Status
+## Output contract
 
-Change: <change-id>
-Round: <initial | rework 1 | rework 2>
-State: implementing / validating / passed / failed / blocked / escalated
-
-Current result:
-- ...
-
-Next action:
-- ...
-
-User decision needed:
-- none / <specific question>
-```
-
-## Final output
-
-```md
-## aiopc Loop Complete
-
-Change: <change-id>
-Conclusion: passed / escalated / blocked
-
-Validation summary:
-- Passed ACs:
-- Failed ACs:
-- Blockers:
-- Acceptance-package change requests:
-
-Artifacts updated:
-- acceptance.md
-- validation-report.md
-- change-log.md
-- tasks.md
-
-Recommended user spot-check:
-- <small list of high-value checks>
-```
+Use compact status only: change id, round, state, result, next action, user decision, and artifact paths. Do not paste long tables in chat. Details: [REFERENCE.md](REFERENCE.md).
 
 ## Guardrails
 
-- Do not reinterpret requirements; send unclear scope back to `aiopc-propose` or the user.
+- Delegate: do not reinterpret requirements or duplicate focused-skill work.
 - Do not claim acceptance without `aiopc-accept` evidence.
-- Do not continue automatic repair after a stop condition.
-- Prefer speed by revalidating only failed and affected items, but never skip high-impact regressions.
+- Prefer failed-and-affected revalidation; full revalidation only when impact requires it.
+- no-unnecessary-agent: direct reads for known aiopc artifacts; agents only for broad unknown exploration.
