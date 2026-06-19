@@ -48,9 +48,11 @@ Validation summary:
 - Failed ACs:
 - Blockers:
 - Acceptance-package change requests:
+- UI Design Change Requests:
 
 Artifacts updated:
 - acceptance.md
+- ui-design.md, if enabled
 - validation-report.md
 - change-log.md
 - tasks.md
@@ -58,3 +60,9 @@ Artifacts updated:
 Recommended user spot-check:
 - <small list of high-value checks>
 ```
+
+## UI design orchestration routing
+
+If `ui-design.md` exists, pass its path to `aiopc-apply` and `aiopc-accept`. Do not parse, summarize, paste, or duplicate UI design details in loop status.
+
+Read `../aiopc-ui-design/REFERENCE.md` only when resolving UI design routing ambiguity, and prefer §7 / §10 only.

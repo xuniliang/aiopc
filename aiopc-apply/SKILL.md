@@ -17,19 +17,19 @@ Implement only accepted scope. Treat `acceptance.md` as frozen unless the user a
 
 ## Minimal reads
 
-Read proposal/tasks/spec delta/acceptance for the active change. For rework, also read only failed ACs, affected regression checks, and files needed to repair them. Do not reread history unless it affects current scope.
+Read proposal/tasks/spec delta/acceptance for the active change. If `ui-design.md` exists, read it and only needed sections of `../aiopc-ui-design/REFERENCE.md`. Do not reread history unless it affects current scope.
 
 ## Workflow
 
 1. Choose scope: pending tasks or rework-only failed ACs.
 2. Implement slices: behavior test -> minimal code -> pass -> next AC.
-3. Keep changes surgical; no unrelated refactors or skipped tests.
+3. If UI design exists, follow UI IDs, Action Contracts, State Ownership, and required UI verification.
 4. Verify with project commands, preferring ECS-like scripts when present.
 5. Update tasks and append `change-log.md`; never overwrite prior rounds.
 
 ## Stop / Escalate
 
-Stop and draft an acceptance-package change request if an AC is wrong, ambiguous, not executable, or requires scope expansion.
+Stop and draft an acceptance-package or UI Design Change Request if an AC/UI design is wrong, ambiguous, not executable, conflicting, or requires scope expansion.
 
 ## Output contract
 

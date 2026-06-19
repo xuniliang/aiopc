@@ -18,6 +18,10 @@ passed / failed / blocked
 |---|---|---|---|---|
 | AC1 | ... | automated test | passed | `npm test ...` passed |
 
+## UI Validation
+| UI ID | Expected | Result | Evidence |
+|---|---|---|---|
+
 ## Reused Previous Results
 - ACx: previously passed, related code not touched, result reused.
 
@@ -48,7 +52,7 @@ Fix validation failures only; do not expand scope.
 - Current result:
 - Expected result:
 - Evidence:
-- Constraints:
+- Suggested repair direction:
 
 ## Regression checks required
 - ...
@@ -83,3 +87,19 @@ After: ...
 - Expands scope: yes/no
 - Requires revalidation: yes/no
 ```
+
+## UI design validation routing
+
+If `ui-design.md` exists, validate it as UI acceptance basis. Read only needed sections from `../aiopc-ui-design/REFERENCE.md`:
+
+- Action Contract / State Ownership: §4.
+- Traceability matrix: §7.
+- UI validation evidence: §9.
+- UI Design Change Request: §10.
+
+Validation requirements:
+
+- Check implemented UI IDs against `ui-design.md` and linked ACs.
+- Data-changing Action Contracts need repeatable evidence or before/after data records.
+- Full UI design should include visual evidence for key pages when available.
+- If implementation differs from current `ui-design.md` without approved change request, fail the relevant UI ID/AC.

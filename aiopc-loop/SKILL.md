@@ -17,15 +17,15 @@ Coordinate `aiopc-apply` and `aiopc-accept`. Do not implement code or make accep
 
 ## Minimal reads
 
-Read only enough to select the change, confirm acceptance exists, and route next step. Delegate implementation and validation details to focused skills instead of duplicating artifact reads.
+Read only enough to select the change, confirm acceptance exists, detect `ui-design.md`, and route next step. Delegate implementation, validation, and UI detail reads to focused skills.
 
 ## Workflow
 
 1. If acceptance is missing/unclear, route to `aiopc-propose` or ask the user.
-2. Run `aiopc-apply` for implementation or scoped rework.
-3. Run `aiopc-accept` for independent validation.
-4. If failed with rework package, repeat apply -> accept up to two automatic rework rounds.
-5. Stop on pass, blocker, bad acceptance, user decision, or rework limit.
+2. Pass `ui-design.md` context when present; do not parse or paste UI details.
+3. Run `aiopc-apply` for implementation or scoped rework.
+4. Run `aiopc-accept` for independent validation.
+5. Repeat failed rework up to two rounds; stop on pass, blocker, bad acceptance/UI design, user decision, or limit.
 
 ## Stop / Escalate
 

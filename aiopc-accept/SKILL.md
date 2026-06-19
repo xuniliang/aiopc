@@ -18,15 +18,15 @@ Validate independently. Implementation summaries are claims, never proof.
 
 ## Minimal reads
 
-Read acceptance and artifacts needed for the current AC scope. First validation covers all ACs. Revalidation covers failed ACs plus affected regression checks. Reuse previous passes only when related code and evidence inputs were untouched.
+Read acceptance and artifacts needed for the current AC scope. If `ui-design.md` exists, read it and only needed sections of `../aiopc-ui-design/REFERENCE.md`. Reuse previous passes only when related inputs were untouched.
 
 ## Workflow
 
 1. Determine validation scope.
 2. Obtain independent evidence with tests, API calls, data checks, browser checks, or logs.
-3. Classify each AC as `passed`, `failed`, `blocked`, or `not-run`.
-4. Write/update `validation-report.md` without deleting history.
-5. Write a rework package for implementation defects, or an acceptance-package change request for bad ACs.
+3. If UI design exists, validate UI IDs, Action Contracts, State Ownership, traceability, and UI evidence.
+4. Classify each AC as `passed`, `failed`, `blocked`, or `not-run`.
+5. Write/update validation report, rework package, or change request as needed.
 
 ## Stop / Escalate
 
